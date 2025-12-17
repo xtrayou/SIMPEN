@@ -124,6 +124,23 @@
                         </span>
                     </a>
                 </li>
+
+                <!-- Loans & Tickets -->
+                <li class="sidebar-title">Peminjaman & Ticket</li>
+
+                <li class="sidebar-item <?= (strpos(uri_string(), 'loans') !== false) ? 'active' : '' ?>">
+                    <a href="<?= base_url('/loans') ?>" class='sidebar-link'>
+                        <i class="bi bi-journal-arrow-down"></i>
+                        <span>Peminjaman ATK</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item <?= (strpos(uri_string(), 'tickets') !== false) ? 'active' : '' ?>">
+                    <a href="<?= base_url('/tickets') ?>" class='sidebar-link'>
+                        <i class="bi bi-ticket-detailed"></i>
+                        <span>Ticketing</span>
+                    </a>
+                </li>
                 
                 <!-- Reports Section -->
                 <li class="sidebar-title">Laporan</li>
