@@ -14,7 +14,7 @@
                     <div class="col-md-4">
                         <label class="form-label">Tipe</label>
                         <select name="type" class="form-select">
-                            <option value="loan-request">Permintaan Peminjaman</option>
+                            <option value="loan-request">Permintaan ATK</option>
                             <option value="restock">Permintaan Restock</option>
                             <option value="issue">Isu/Perbaikan</option>
                             <option value="other">Lainnya</option>

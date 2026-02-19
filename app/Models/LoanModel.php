@@ -19,7 +19,6 @@ class LoanModel extends Model
         'contact',
         'loan_date',
         'due_date',
-        'return_date',
         'status',
         'notes',
         'ticket_id',
@@ -37,8 +36,7 @@ class LoanModel extends Model
         'contact'            => 'permit_empty|max_length[100]',
         'loan_date'          => 'required|valid_date',
         'due_date'           => 'permit_empty|valid_date',
-        'return_date'        => 'permit_empty|valid_date',
-        'status'             => 'in_list[requested,approved,borrowed,returned,overdue,cancelled]',
+        'status'             => 'in_list[requested,approved,distributed,cancelled]',
     ];
 
     public function withItems($id)

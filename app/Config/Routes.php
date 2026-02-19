@@ -84,15 +84,14 @@ $routes->group('products', function($routes) {
 // Dashboard API for real-time updates
 $routes->get('api/dashboard/stats', 'Api\DashboardController::getStats');
 
-// Loans (Peminjaman)
+// Permintaan ATK
 $routes->group('loans', function($routes) {
     $routes->get('/', 'LoanController::index');
     $routes->get('create', 'LoanController::create');
     $routes->post('store', 'LoanController::store');
     $routes->get('show/(:num)', 'LoanController::show/$1');
     $routes->post('approve/(:num)', 'LoanController::approve/$1');
-    $routes->post('borrow/(:num)', 'LoanController::borrow/$1');
-    $routes->post('return/(:num)', 'LoanController::return/$1');
+    $routes->post('distribute/(:num)', 'LoanController::distribute/$1');
     $routes->post('cancel/(:num)', 'LoanController::cancel/$1');
 });
 

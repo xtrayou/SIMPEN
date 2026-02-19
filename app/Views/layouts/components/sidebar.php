@@ -126,12 +126,12 @@
                 </li>
 
                 <!-- Loans & Tickets -->
-                <li class="sidebar-title">Peminjaman & Ticket</li>
+                <li class="sidebar-title">Permintaan ATK & Ticket</li>
 
                 <li class="sidebar-item <?= (strpos(uri_string(), 'loans') !== false) ? 'active' : '' ?>">
                     <a href="<?= base_url('/loans') ?>" class='sidebar-link'>
                         <i class="bi bi-journal-arrow-down"></i>
-                        <span>Peminjaman ATK</span>
+                        <span>Permintaan ATK</span>
                     </a>
                 </li>
 

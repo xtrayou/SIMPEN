@@ -24,7 +24,7 @@ class LoanController extends BaseController
 
     public function index()
     {
-        $this->setPageData('Peminjaman ATK', 'Tracking peminjaman fakultas');
+        $this->setPageData('Permintaan ATK', 'Tracking permintaan ATK fakultas');
 
         $status = $this->request->getGet('status');
         $builder = $this->loanModel->orderBy('created_at', 'DESC');
@@ -41,7 +41,7 @@ class LoanController extends BaseController
 
     public function create()
     {
-        $this->setPageData('Buat Peminjaman', 'Form peminjaman ATK');
+        $this->setPageData('Buat Permintaan', 'Form permintaan ATK');
         $products = $this->productModel->where('is_active', true)->orderBy('name', 'ASC')->findAll();
         return $this->render('loans/create', [
             'products' => $products,
@@ -90,10 +90,10 @@ class LoanController extends BaseController
 
             $db->transComplete();
             if ($db->transStatus() === false) {
-                throw new \Exception('Gagal menyimpan peminjaman');
+                throw new \Exception('Gagal menyimpan permintaan');
             }
 
-            $this->setFlash('success', 'Peminjaman berhasil dibuat');
+            $this->setFlash('success', 'Permintaan ATK berhasil dibuat');
             return redirect()->to('/loans');
         } catch (\Throwable $e) {
             $db->transRollback();
@@ -106,11 +106,11 @@ class LoanController extends BaseController
     {
         $loan = $this->loanModel->withItems($id);
         if (!$loan) {
-            $this->setFlash('error', 'Peminjaman tidak ditemukan');
+            $this->setFlash('error', 'Permintaan tidak ditemukan');
             return redirect()->to('/loans');
         }
 
-        $this->setPageData('Detail Peminjaman', 'No: #' . $id);
+        $this->setPageData('Detail Permintaan', 'No: #' . $id);
         return $this->render('loans/show', ['loan' => $loan]);
     }
 
@@ -120,14 +120,14 @@ class LoanController extends BaseController
         if (!$loan) return $this->jsonResponse(['status' => false, 'message' => 'Data tidak ditemukan'], 404);
         if ($loan['status'] !== 'requested') return $this->jsonResponse(['status' => false, 'message' => 'Status tidak valid'], 400);
         $this->loanModel->update($id, ['status' => 'approved']);
-        return $this->jsonResponse(['status' => true, 'message' => 'Peminjaman disetujui']);
+        return $this->jsonResponse(['status' => true, 'message' => 'Permintaan disetujui']);
     }
 
-    public function borrow($id)
+    public function distribute($id)
     {
         $loan = $this->loanModel->find($id);
         if (!$loan) return $this->jsonResponse(['status' => false, 'message' => 'Data tidak ditemukan'], 404);
-        if (!in_array($loan['status'], ['approved', 'requested'])) return $this->jsonResponse(['status' => false, 'message' => 'Status tidak valid'], 400);
+        if (!in_array($loan['status'], ['approved'])) return $this->jsonResponse(['status' => false, 'message' => 'Status tidak valid'], 400);
 
         $items = $this->loanItemModel->where('loan_id', $id)->findAll();
         $db = \Config\Database::connect();
@@ -138,46 +138,14 @@ class LoanController extends BaseController
                     'product_id' => $item['product_id'],
                     'type' => 'OUT',
                     'quantity' => $item['quantity'],
-                    'notes' => 'Peminjaman Loan #' . $id,
+                    'notes' => 'Distribusi Permintaan ATK #' . $id,
                     'created_by' => 'LoanSystem'
                 ]);
             }
-            $this->loanModel->update($id, ['status' => 'borrowed']);
+            $this->loanModel->update($id, ['status' => 'distributed']);
             $db->transComplete();
             if ($db->transStatus() === false) throw new \Exception('Transaksi gagal');
-            return $this->jsonResponse(['status' => true, 'message' => 'Barang dipinjamkan']);
-        } catch (\Throwable $e) {
-            $db->transRollback();
-            return $this->jsonResponse(['status' => false, 'message' => $e->getMessage()], 500);
-        }
-    }
-
-    public function return($id)
-    {
-        $loan = $this->loanModel->find($id);
-        if (!$loan) return $this->jsonResponse(['status' => false, 'message' => 'Data tidak ditemukan'], 404);
-        if ($loan['status'] !== 'borrowed') return $this->jsonResponse(['status' => false, 'message' => 'Status tidak valid'], 400);
-
-        $items = $this->loanItemModel->where('loan_id', $id)->findAll();
-        $db = \Config\Database::connect();
-        $db->transStart();
-        try {
-            foreach ($items as $item) {
-                $this->stockMovementModel->createMovement([
-                    'product_id' => $item['product_id'],
-                    'type' => 'IN',
-                    'quantity' => $item['quantity'],
-                    'notes' => 'Pengembalian Loan #' . $id,
-                    'created_by' => 'LoanSystem'
-                ]);
-            }
-            $this->loanModel->update($id, [
-                'status' => 'returned',
-                'return_date' => date('Y-m-d')
-            ]);
-            $db->transComplete();
-            if ($db->transStatus() === false) throw new \Exception('Transaksi gagal');
-            return $this->jsonResponse(['status' => true, 'message' => 'Barang dikembalikan']);
+            return $this->jsonResponse(['status' => true, 'message' => 'Barang telah didistribusikan']);
         } catch (\Throwable $e) {
             $db->transRollback();
             return $this->jsonResponse(['status' => false, 'message' => $e->getMessage()], 500);
@@ -188,7 +156,7 @@ class LoanController extends BaseController
     {
         $loan = $this->loanModel->find($id);
         if (!$loan) return $this->jsonResponse(['status' => false, 'message' => 'Data tidak ditemukan'], 404);
-        if (in_array($loan['status'], ['borrowed', 'returned'])) return $this->jsonResponse(['status' => false, 'message' => 'Tidak bisa membatalkan'] ,400);
+        if (in_array($loan['status'], ['distributed'])) return $this->jsonResponse(['status' => false, 'message' => 'Tidak bisa membatalkan'] ,400);
         $this->loanModel->update($id, ['status' => 'cancelled']);
         return $this->jsonResponse(['status' => true, 'message' => 'Dibatalkan']);
     }

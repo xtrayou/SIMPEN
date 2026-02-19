@@ -8,7 +8,7 @@
                 <?= csrf_field() ?>
                 <div class="row g-3">
                     <div class="col-md-6">
-                        <label class="form-label">Nama Peminjam</label>
+                        <label class="form-label">Nama Pemohon</label>
                         <input type="text" name="borrower_name" class="form-control" required value="<?= old('borrower_name') ?>">
                     </div>
                     <div class="col-md-3">
@@ -24,12 +24,8 @@
                         <input type="text" name="contact" class="form-control" value="<?= old('contact') ?>">
                     </div>
                     <div class="col-md-3">
-                        <label class="form-label">Tanggal Pinjam</label>
+                        <label class="form-label">Tanggal Permintaan</label>
                         <input type="date" name="loan_date" class="form-control" required value="<?= old('loan_date', date('Y-m-d')) ?>">
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label">Jatuh Tempo</label>
-                        <input type="date" name="due_date" class="form-control" value="<?= old('due_date') ?>">
                     </div>
                     <div class="col-12">
                         <label class="form-label">Catatan</label>
@@ -38,7 +34,7 @@
                 </div>
 
                 <hr>
-                <h6 class="mb-3">Barang Dipinjam</h6>
+                <h6 class="mb-3">Barang yang Diminta</h6>
                 <div id="items">
                     <div class="row g-2 align-items-end item-row">
                         <div class="col-md-6">

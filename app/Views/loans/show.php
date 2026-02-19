@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-md-8">
             <div class="card mb-3">
-                <div class="card-header">Detail Peminjaman</div>
+                <div class="card-header">Detail Permintaan ATK</div>
                 <div class="card-body">
                     <div class="row mb-2">
                         <div class="col-md-6">
@@ -14,8 +14,7 @@
                             <div><strong>Unit:</strong> <?= esc($loan['borrower_unit'] ?? '-') ?></div>
                         </div>
                         <div class="col-md-6">
-                            <div><strong>Tgl Pinjam:</strong> <?= esc($loan['loan_date']) ?></div>
-                            <div><strong>Jatuh Tempo:</strong> <?= esc($loan['due_date'] ?? '-') ?></div>
+                            <div><strong>Tgl Permintaan:</strong> <?= esc($loan['loan_date']) ?></div>
                             <div><strong>Status:</strong> <span class="badge bg-secondary text-uppercase"><?= esc($loan['status']) ?></span></div>
                         </div>
                     </div>
@@ -57,12 +56,11 @@
                     <?php if (in_array($loan['status'], ['requested'])): ?>
                         <button class="btn btn-success" id="btn-approve">Setujui</button>
                     <?php endif; ?>
-                    <?php if (in_array($loan['status'], ['requested','approved'])): ?>
-                        <button class="btn btn-primary" id="btn-borrow">Pinjamkan</button>
-                        <button class="btn btn-outline-danger" id="btn-cancel">Batalkan</button>
+                    <?php if (in_array($loan['status'], ['approved'])): ?>
+                        <button class="btn btn-primary" id="btn-distribute">Distribusikan</button>
                     <?php endif; ?>
-                    <?php if ($loan['status'] === 'borrowed'): ?>
-                        <button class="btn btn-info" id="btn-return">Terima Pengembalian</button>
+                    <?php if (in_array($loan['status'], ['requested','approved'])): ?>
+                        <button class="btn btn-outline-danger" id="btn-cancel">Batalkan</button>
                     <?php endif; ?>
                 </div>
             </div>
@@ -87,18 +85,13 @@
     }
 
     $('#btn-approve').on('click', function(){
-        showConfirm('Setujui?', 'Setujui peminjaman ini', function(){
+        showConfirm('Setujui?', 'Setujui permintaan ini', function(){
             postAction('<?= base_url('loans/approve/'.$loan['id']) ?>');
         });
     });
-    $('#btn-borrow').on('click', function(){
-        showConfirm('Pinjamkan?', 'Kurangi stok sesuai item', function(){
-            postAction('<?= base_url('loans/borrow/'.$loan['id']) ?>');
-        });
-    });
-    $('#btn-return').on('click', function(){
-        showConfirm('Terima Pengembalian?', 'Tambah stok kembali', function(){
-            postAction('<?= base_url('loans/return/'.$loan['id']) ?>');
+    $('#btn-distribute').on('click', function(){
+        showConfirm('Distribusikan?', 'Kurangi stok sesuai item dan distribusikan', function(){
+            postAction('<?= base_url('loans/distribute/'.$loan['id']) ?>');
         });
     });
     $('#btn-cancel').on('click', function(){
