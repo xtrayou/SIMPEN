@@ -156,7 +156,7 @@ class LoanController extends BaseController
     {
         $loan = $this->loanModel->find($id);
         if (!$loan) return $this->jsonResponse(['status' => false, 'message' => 'Data tidak ditemukan'], 404);
-        if (in_array($loan['status'], ['distributed'])) return $this->jsonResponse(['status' => false, 'message' => 'Tidak bisa membatalkan'] ,400);
+        if (in_array($loan['status'], ['distributed'])) return $this->jsonResponse(['status' => false, 'message' => 'Tidak bisa membatalkan'], 400);
         $this->loanModel->update($id, ['status' => 'cancelled']);
         return $this->jsonResponse(['status' => true, 'message' => 'Dibatalkan']);
     }

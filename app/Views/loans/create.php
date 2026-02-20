@@ -69,7 +69,7 @@
 
 <?= $this->section('scripts') ?>
 <script>
-    $(document).on('click', '.add-row', function(){
+    $(document).on('click', '.add-row', function() {
         const row = $(this).closest('.item-row');
         const clone = row.clone();
         clone.find('select').val('');
@@ -78,7 +78,7 @@
         $('#items').append(clone);
     });
 
-    $(document).on('click', '.remove-row', function(){
+    $(document).on('click', '.remove-row', function() {
         $(this).closest('.item-row').remove();
     });
 </script>

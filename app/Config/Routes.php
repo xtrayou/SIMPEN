@@ -5,13 +5,13 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-$routes->get('/', 'DashboardController::index');
+$routes->get('/', 'HomeController::index');
 
 //testing
 $routes->get('test', 'TestController::testModels');
 
 //category
-$routes->group('categories', function($routes) {
+$routes->group('categories', function ($routes) {
     $routes->get('/', 'CategoryController::index');
     $routes->get('create', 'CategoryController::create');
     $routes->post('store', 'CategoryController::store');
@@ -21,7 +21,7 @@ $routes->group('categories', function($routes) {
 });
 
 //product
-$routes->group('products', function($routes) {
+$routes->group('products', function ($routes) {
     $routes->get('/', 'ProductController::index');
     $routes->get('create', 'ProductController::create');
     $routes->get('show/(:num)', 'ProductController::show/$1');
@@ -33,7 +33,7 @@ $routes->group('products', function($routes) {
 });
 
 //Stock Management
-$routes->group('stock', function($routes) {
+$routes->group('stock', function ($routes) {
     $routes->get('in', 'StockController::stockIn');
     $routes->post('in/store', 'StockController::storeStockIn');
     $routes->get('out', 'StockController::stockOut');
@@ -47,7 +47,7 @@ $routes->group('stock', function($routes) {
 });
 
 //Reports
-$routes->group('reports', function($routes) {
+$routes->group('reports', function ($routes) {
     $routes->get('stock', 'ReportController::stock');
     $routes->get('movements', 'ReportController::movements');
     $routes->get('export/stock', 'ReportController::exportStock');
@@ -57,7 +57,7 @@ $routes->group('reports', function($routes) {
 
 
 //Api routes untuk ajax
-$routes->group('api', function($routes) {
+$routes->group('api', function ($routes) {
     $routes->get('products/search', 'Api\ProductController::search');
     $routes->get('categories/active', 'Api\CategoryController::getActive');
     $routes->get('product/(:num)/info', 'Api\StockController::getProductInfo/$1');
@@ -67,14 +67,14 @@ $routes->group('api', function($routes) {
 });
 
 // Products API routes
-$routes->group('api/products', function($routes) {
+$routes->group('api/products', function ($routes) {
     $routes->get('search', 'Api\ProductController::search');
     $routes->get('stock-status/(:num)', 'Api\ProductController::getStockStatus/$1');
     $routes->get('by-category/(:num)', 'Api\ProductController::getByCategory/$1');
 });
 
 // Products export routes
-$routes->group('products', function($routes) {
+$routes->group('products', function ($routes) {
     // Existing CRUD routes...
     $routes->get('export/excel', 'ProductController::exportExcel');
     $routes->get('export/pdf', 'ProductController::exportPDF');
@@ -85,18 +85,18 @@ $routes->group('products', function($routes) {
 $routes->get('api/dashboard/stats', 'Api\DashboardController::getStats');
 
 // Permintaan ATK
-$routes->group('loans', function($routes) {
+$routes->group('loans', function ($routes) {
     $routes->get('/', 'LoanController::index');
     $routes->get('create', 'LoanController::create');
     $routes->post('store', 'LoanController::store');
     $routes->get('show/(:num)', 'LoanController::show/$1');
     $routes->post('approve/(:num)', 'LoanController::approve/$1');
-    $routes->post('distribute/(:num)', 'LoanController::distribute/$1');
+    $routes->get('/', 'HomeController::index');   
     $routes->post('cancel/(:num)', 'LoanController::cancel/$1');
 });
 
 // Tickets
-$routes->group('tickets', function($routes) {
+$routes->group('tickets', function ($routes) {
     $routes->get('/', 'TicketController::index');
     $routes->get('create', 'TicketController::create');
     $routes->post('store', 'TicketController::store');

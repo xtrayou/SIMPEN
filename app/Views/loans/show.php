@@ -59,7 +59,7 @@
                     <?php if (in_array($loan['status'], ['approved'])): ?>
                         <button class="btn btn-primary" id="btn-distribute">Distribusikan</button>
                     <?php endif; ?>
-                    <?php if (in_array($loan['status'], ['requested','approved'])): ?>
+                    <?php if (in_array($loan['status'], ['requested', 'approved'])): ?>
                         <button class="btn btn-outline-danger" id="btn-cancel">Batalkan</button>
                     <?php endif; ?>
                 </div>
@@ -71,32 +71,36 @@
 
 <?= $this->section('scripts') ?>
 <script>
-    function postAction(url){
+    function postAction(url) {
         showLoading('Memproses...');
-        $.post(url, {<?= csrf_token() ?>: '<?= csrf_hash() ?>'})
-            .done(function(resp){
-                Swal.close();
-                showSuccess('Berhasil', resp.message || 'Tindakan berhasil', function(){ location.reload(); });
+        $.post(url, {
+                <?= csrf_token() ?>: '<?= csrf_hash() ?>'
             })
-            .fail(function(xhr){
+            .done(function(resp) {
+                Swal.close();
+                showSuccess('Berhasil', resp.message || 'Tindakan berhasil', function() {
+                    location.reload();
+                });
+            })
+            .fail(function(xhr) {
                 Swal.close();
                 showError('Gagal', xhr.responseJSON?.message || 'Terjadi kesalahan');
             });
     }
 
-    $('#btn-approve').on('click', function(){
-        showConfirm('Setujui?', 'Setujui permintaan ini', function(){
-            postAction('<?= base_url('loans/approve/'.$loan['id']) ?>');
+    $('#btn-approve').on('click', function() {
+        showConfirm('Setujui?', 'Setujui permintaan ini', function() {
+            postAction('<?= base_url('loans/approve/' . $loan['id']) ?>');
         });
     });
-    $('#btn-distribute').on('click', function(){
-        showConfirm('Distribusikan?', 'Kurangi stok sesuai item dan distribusikan', function(){
-            postAction('<?= base_url('loans/distribute/'.$loan['id']) ?>');
+    $('#btn-distribute').on('click', function() {
+        showConfirm('Distribusikan?', 'Kurangi stok sesuai item dan distribusikan', function() {
+            postAction('<?= base_url('loans/distribute/' . $loan['id']) ?>');
         });
     });
-    $('#btn-cancel').on('click', function(){
-        showConfirm('Batalkan?', 'Batalkan pengajuan ini', function(){
-            postAction('<?= base_url('loans/cancel/'.$loan['id']) ?>');
+    $('#btn-cancel').on('click', function() {
+        showConfirm('Batalkan?', 'Batalkan pengajuan ini', function() {
+            postAction('<?= base_url('loans/cancel/' . $loan['id']) ?>');
         });
     });
 </script>

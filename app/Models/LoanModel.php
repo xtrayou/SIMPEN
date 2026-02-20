@@ -31,7 +31,7 @@ class LoanModel extends Model
 
     protected $validationRules = [
         'borrower_name'      => 'required|min_length[3]|max_length[150]',
-        'borrower_identifier'=> 'permit_empty|max_length[100]',
+        'borrower_identifier' => 'permit_empty|max_length[100]',
         'borrower_unit'      => 'permit_empty|max_length[150]',
         'contact'            => 'permit_empty|max_length[100]',
         'loan_date'          => 'required|valid_date',
